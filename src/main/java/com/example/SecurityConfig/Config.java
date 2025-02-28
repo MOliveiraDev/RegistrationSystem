@@ -14,25 +14,30 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableWebSecurity
 public class Config {
 
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf().disable() // Desabilita CSRF para APIs RESTful
+                .cors().and() // Habilita CORS
                 .authorizeHttpRequests()
-                .requestMatchers("/usuarios/cadastrar").permitAll() // Permite acesso ao cadastro sem autenticação
+                .requestMatchers("/usuarios/cadastrar", "/usuarios/login").permitAll() // Permite acesso ao cadastro e login sem autenticação
                 .anyRequest().authenticated(); // Todas as outras requisições exigem autenticação
         return http.build();
     }
 
     @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(); // Configura o codificador de senhas (BCrypt)
+    }
+
+    @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
-         @Override
+            @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**") //Permite CORS em todas as requisições
-                        .allowedOrigins("http://localhost:8080") //Permite acesso ao Front-End
-                        .allowedMethods("GET", "POST", "PUT", "DELETE"); //Permite os métodos GET, POST, PUT e DELETE
+                registry.addMapping("/**") // Permite CORS para todos os endpoints
+                        .allowedOrigins("http://localhost:8080") // Permite requisições do frontend
+                        .allowedMethods("GET", "POST", "PUT", "DELETE"); // Permite os métodos HTTP
             }
         };
     }
