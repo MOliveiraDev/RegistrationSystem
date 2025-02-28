@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 @Entity
+@Table (name = "usuario") //Define o nome da tabela
 public class User {
 
     @Id
