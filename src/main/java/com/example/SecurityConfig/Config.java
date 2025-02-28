@@ -29,16 +29,4 @@ public class Config {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(); // Configura o codificador de senhas (BCrypt)
     }
-
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**") // Permite CORS para todos os endpoints
-                        .allowedOrigins("http://localhost:8080") // Permite requisições do frontend
-                        .allowedMethods("GET", "POST", "PUT", "DELETE"); // Permite os métodos HTTP
-            }
-        };
-    }
 }
